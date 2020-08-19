@@ -5,12 +5,11 @@
 
 header{
     display: block;
-    width: 500px;
+    width: 100%;
     height: auto;
     margin: 0 auto;
 
     text-align: center;
-    /* background-color: blue; */
 }
 
 header #game-name{
@@ -23,7 +22,7 @@ header #game-name{
 
 header #new-game-button{
     display: block;
-    width: 100px;
+    width: 30%;
     height: 20px;
     margin: 20px auto 0;
     padding: 10px 6px;
@@ -32,7 +31,6 @@ header #new-game-button{
     font-weight: bold;
     line-height: 20px;
 
-    /* background-color:  peru; */
     background-color: saddlebrown;
     color: white;
     text-decoration: none;
@@ -49,6 +47,40 @@ header p{
     font-family: Arial, Helvetica, sans-serif;
     font-size: 30px;
     font-weight: bold;
+}
+
+@media (min-width: 300px) {
+    header #new-game-button{
+        width: 25%;
+        margin: 10px auto 0;
+    }
+
+    header p{
+        margin: 10px auto 0;
+        font-size: 26px;
+    }
+}
+
+@media (min-width: 400px) {
+    header #new-game-button{
+        width: 25%;
+    }
+}
+
+@media (min-width: 500px) {
+    header{
+        width: 500px;
+    }
+
+    header #new-game-button{
+        width: 100px;
+        margin: 20px auto 0;
+    }
+
+    header p{
+        margin: 20px auto 0;
+        font-size: 30px;
+    }
 }
 
 #grid-container{
@@ -90,14 +122,11 @@ header p{
     transform: translate(-50%, -50%);
     text-align: center;
     line-height: 150px;
-    /* padding: 10px; */
 
     font-family: Arial, Helvetica, sans-serif;
     font-size: 50px;
     font-weight: bold;
 
-    /* background-color: saddlebrown;
-    color: white; */
     border-radius: 20px;
 
 }

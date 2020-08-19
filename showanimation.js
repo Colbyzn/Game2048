@@ -5,8 +5,8 @@ function showNumberAnimation(i, j, randnum){
     numberCell.text(randnum);
 
     numberCell.animate({
-        width: "100px", //不设定宽度和高度，那么背景颜色就是无效
-        height: "100px",
+        width: cellWidth, //不设定宽度和高度，那么背景颜色就是无效
+        height: cellWidth,
         top: getPosTop(i, j),
         left: getPosLeft(i, j)
     }, 50);

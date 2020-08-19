@@ -1,9 +1,17 @@
+documentWidth = window.screen.availWidth;
+gridContainerWidth = 0.92 * documentWidth;
+cellWidth = 0.18 * documentWidth;
+cellSpace = 0.04 * documentWidth;
+blockWidth = 0.6 * documentWidth;
+blockHeight = 0.3 * documentWidth;
+blockFontSize = 0.1 * documentWidth;
+
 function getPosTop(i, j){
-    return 20 + 120 * i;
+    return cellSpace + (cellWidth + cellSpace) * i;
 }
 
 function getPosLeft(i, j){
-    return 20 + 120 * j;
+    return cellSpace + (cellWidth + cellSpace) * j;
 }
 
 function getBackgroundColor (num){

@@ -2,9 +2,35 @@ var board = [];
 var score = 0;
 var hasMerged = [];
 
+var startx = 0;
+var starty =0;
+var endx =0;
+var endy =0;
+
 $(document).ready(function (){
+    preForMobile();
     startGame();
 });
+
+function preForMobile() {
+    if (documentWidth > 500) {
+        gridContainerWidth = 500;
+        cellWidth = 100;
+        cellSpace = 20;
+        blockWidth = 300;
+        blockHeight = 150;
+        blockFontSize = 50;
+    }
+    $("#grid-container").css("width", gridContainerWidth - 2 * cellSpace);
+    $("#grid-container").css("height", gridContainerWidth - 2 * cellSpace);
+    $("#grid-container").css("padding", cellSpace);
+    $("#grid-container").css("border-radius", 0.02 * gridContainerWidth);
+
+    $(".grid-cell").css("width", cellWidth);
+    $(".grid-cell").css("height", cellWidth);
+    $(".grid-cell").css("border-radius", 0.02 * cellWidth);
+
+}
 
 function startGame(){
     //初始化棋盘格（包括位置、数据以及得分）
@@ -105,20 +131,20 @@ function generateOneNumber(){
 
 function isGameOver(){
     // $(".block").remove();
-    $("body").append('<div class="block" id="game-over-block"></div>');
+    $("body").append('<div class="block" id="game-over-block" onclick = "startGame()"></div>');
     var gameOverBlock = $("#game-over-block");
     if (noSpace() && noMove()){
-        // alert("Game is Over!!!");
-        // gameOverBlock.css("width", "300px");
-        // gameOverBlock.css("height", "150px");
+        // $(".block").css("font-size", blockFontSize + "px"); //注意要加上单位 px
+        // $(".block").css("line-height", blockHeight + "px");
+        gameOverBlock.css("font-size", blockFontSize + "px"); //注意要加上单位 px
+        gameOverBlock.css("line-height", blockHeight + "px");
         gameOverBlock.css("background-color", "saddlebrown");
         gameOverBlock.css("color", "white");
-        // gameOverBlock.text("Game is Over!!!");
-        gameOverBlock.text("游戏结束");
+        gameOverBlock.text("重新开始");
 
         gameOverBlock.animate({ //游戏结束的弹框效果
-            width: "300px",
-            height: "150px"
+            width: blockWidth,
+            height: blockHeight
         }, 100);
         
     }
@@ -135,20 +161,18 @@ function updateBoardView(){
 
     for (let i = 0; i < 4; i++ ){
         for (let j = 0; j < 4; j++ ){
-            // var numberCell = $("#grid-container").append('<div class="number-cell" id="number-cell-' + i + '-' + j + '"></div>');
             $("#grid-container").append('<div class="number-cell" id="number-cell-' + i + '-' + j + '"></div>');  //此处要注意
             var numberCell = $("#number-cell-" + i + "-" + j );
             if (board[i][j] == 0){
                 numberCell.css("width", "0px");
                 numberCell.css("height", "0px");
-                numberCell.css("top", getPosTop(i, j) + 50);
-                numberCell.css("left", getPosLeft(i, j) + 50);
-                // numberCell.text(board[i][j]);
+                numberCell.css("top", getPosTop(i, j) + cellWidth/2);
+                numberCell.css("left", getPosLeft(i, j) + cellWidth/2);
             }
 
             else {
-                numberCell.css("width", "100px");
-                numberCell.css("height", "100px");
+                numberCell.css("width", cellWidth);
+                numberCell.css("height", cellWidth);
                 numberCell.css("top", getPosTop(i, j));
                 numberCell.css("left", getPosLeft(i, j));
                 numberCell.css("background-color", getBackgroundColor(board[i][j]));
@@ -159,6 +183,8 @@ function updateBoardView(){
             hasMerged[i][j] = false;
         }
     }
+    $(".number-cell").css("line-height", cellWidth + "px"); //注意要加上单位 px
+    $(".number-cell").css("font-size", 0.6 * cellWidth + "px");
 }
 
 function updateScore(score){
@@ -168,30 +194,84 @@ function updateScore(score){
 $(document).keydown(function (event){
     switch (event.keyCode){
         case 37:  //move left
+        event.preventDefault(); /* 加入 event.preventDefault() 解决由于电
+        脑屏幕分辩导致右侧出现滚动条时，按上下键时出现浏览器的滚动条也会随之动作的问题 */
             moveLeft();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
             break;
 
         case 38:  //move up
+        event.preventDefault();
             moveUp();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
             break;
 
         case 39:  //move right
+        event.preventDefault();
             moveRight();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
             break;
 
         case 40:  //move down
+        event.preventDefault();
             moveDown();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
             break;
 
         default: break;
+    }
+});
+
+document.addEventListener ("touchstart", function (event){
+    startx = event.touches[0].pageX;
+    starty = event.touches[0].pageY;
+});
+
+document.addEventListener ("touchend", function (event){
+    endx = event.changedTouches[0].pageX;
+    endy = event.changedTouches[0].pageY;
+
+    var deltax = endx - startx;
+    var deltay = endy - starty;
+
+    //解决误触发的问题：用户只是点击一下屏幕，却出现格子移动的情况
+    if (Math.abs(deltax) < 0.3 * documentWidth && Math.abs(deltay) < 0.3 * documentWidth) {
+        return;
+    }
+
+    if (Math.abs(deltax) >= Math.abs(deltay)) { //move to the x axis
+        if (deltax > 0) {
+            //move right
+            moveRight();
+            setTimeout("generateOneNumber()", 210);
+            setTimeout("isGameOver()", 300);
+        }
+        else {
+            //move left
+            moveLeft();
+            setTimeout("generateOneNumber()", 210);
+            setTimeout("isGameOver()", 300);
+        }
+        
+    }
+
+    else {  //move to the y axis
+        if (deltay > 0) {
+            //move down
+            moveDown();
+            setTimeout("generateOneNumber()", 210);
+            setTimeout("isGameOver()", 300);
+        }
+        else {
+            //move up
+            moveUp();
+            setTimeout("generateOneNumber()", 210);
+            setTimeout("isGameOver()", 300);
+        }
     }
 });
 
