@@ -231,6 +231,11 @@ document.addEventListener ("touchstart", function (event){
     starty = event.touches[0].pageY;
 });
 
+//解决手机端浏览器下滑手势误触发刷新的问题：用户向下滑动，出现格子不往下移动，页面却刷新了
+document.addEventListener("touchmove", function (event) {
+    event.preventDefault();
+});
+
 document.addEventListener ("touchend", function (event){
     endx = event.changedTouches[0].pageX;
     endy = event.changedTouches[0].pageY;
