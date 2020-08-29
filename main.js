@@ -251,12 +251,14 @@ document.addEventListener ("touchend", function (event){
     if (Math.abs(deltax) >= Math.abs(deltay)) { //move to the x axis
         if (deltax > 0) {
             //move right
+            event.preventDefault();
             moveRight();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
         }
         else {
             //move left
+            event.preventDefault();
             moveLeft();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
@@ -267,12 +269,14 @@ document.addEventListener ("touchend", function (event){
     else {  //move to the y axis
         if (deltay > 0) {
             //move down
+            event.preventDefault();
             moveDown();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
         }
         else {
             //move up
+            event.preventDefault();
             moveUp();
             setTimeout("generateOneNumber()", 210);
             setTimeout("isGameOver()", 300);
